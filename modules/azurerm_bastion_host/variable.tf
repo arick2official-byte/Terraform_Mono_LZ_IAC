@@ -1,1 +1,1 @@
-variable "bastions" {}
+variable "bastions" {type = map(any)}

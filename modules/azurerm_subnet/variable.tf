@@ -1,1 +1,1 @@
-variable "snets" {}
+variable "snets" {type = map(any)}

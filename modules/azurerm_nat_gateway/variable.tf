@@ -1,1 +1,1 @@
-variable "nat_gateways" {}
+variable "nat_gateways" {type = map(any)}

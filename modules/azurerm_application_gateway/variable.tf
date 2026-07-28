@@ -1,1 +1,1 @@
-variable "app_gateways" {}
+variable "app_gateways" {type = map(any)}
