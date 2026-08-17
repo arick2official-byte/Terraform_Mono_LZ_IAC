@@ -1,0 +1,51 @@
+name: Terraform Security Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform-security:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout Terraform code
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 2. Install Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      # 3. Terraform Init
+      - name: Terraform Init
+        run: terraform init
+
+      # 4. Terraform Validate
+      - name: Terraform Validate
+        run: terraform validate
+
+      # 5. Install tfsec
+      - name: Install tfsec
+        run: |
+          curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+
+      # 6. Run tfsec
+      - name: Run tfsec
+        run: tfsec .
+
+      # 7. Install TruffleHog
+      - name: Install TruffleHog
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sh -s -- -b /usr/local/bin
+
+      # 8. Run TruffleHog
+      - name: Run TruffleHog
+        run: |
+          trufflehog filesystem . --results=verified,unknown
