@@ -3,7 +3,7 @@ name: Terraform Security Pipeline
 on:
   push:
     branches:
-      - main
+      - feature/firstpush
   pull_request:
     branches:
       - main
